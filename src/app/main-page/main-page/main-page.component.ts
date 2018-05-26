@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as DG from '2gis-maps';
+import { AuthenticationService } from '../../guard/authentication.service';
+import { MainService } from '../main.service';
 
 @Component({
   selector: 'app-main-page',
@@ -11,7 +13,7 @@ export class MainPageComponent implements OnInit {
   map: any;
   markers: any;
 
-  constructor() { }
+  constructor(private authenticationService: AuthenticationService, private mainService: MainService) { }
 
   ngOnInit() {
     this.createMap();
@@ -32,7 +34,7 @@ export class MainPageComponent implements OnInit {
     DG.then(() => {
       this.map.locate({ setView: true, watch: true })
         .on('locationfound', (e) => {
-          DG.marker([e.latitude, e.longitude]).addTo(this.map);
+          let marker = DG.marker([e.latitude, e.longitude]).addTo(this.map);
         })
         .on('locationerror', (e) => {
           DG.popup()
@@ -60,6 +62,22 @@ export class MainPageComponent implements OnInit {
   }
 
   saveMarkers() {
-      console.log(this.markers);
+    let layers = this.markers._layers;
+    let coord = [];
+    
+    for (let prop in layers) {
+      const markers = layers[prop];
+      coord.push(markers.getLatLng());
+    }
+
+    this.mainService.saveMarkers(coord)
+      .subscribe(
+        data => {
+          console.log(data);
+        });
+  }
+
+  logOut() {
+    this.authenticationService.logout();
   }
 }

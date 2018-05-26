@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import { MainPageModule } from './main-page/main-page.module';
 import { AboutAuthorModule } from './about-author/about-author.module';
 import { AuthorizationModule } from './authorization/authorization.module';
+import { AuthenticationService } from './guard/authentication.service';
+import { AuthGuardService } from './guard/auth.guard';
 
 const appRoutes: Routes = [
   {path: '', redirectTo: 'main', pathMatch: 'full'}
@@ -24,7 +26,7 @@ const appRoutes: Routes = [
     AuthorizationModule,
     RouterModule.forRoot(appRoutes),
   ],
-  providers: [],
+  providers: [AuthenticationService, AuthGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
