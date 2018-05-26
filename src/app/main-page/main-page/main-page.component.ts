@@ -54,17 +54,17 @@ export class MainPageComponent implements OnInit {
     });
   }
 
-  showMarkers() {
-    DG.then(() => {
-      this.markers.addTo(this.map);
-      this.map.fitBounds(this.markers.getBounds());
-    });
-  }
+  // showMarkers() {
+  //   DG.then(() => {
+  //     this.markers.addTo(this.map);
+  //     this.map.fitBounds(this.markers.getBounds());
+  //   });
+  // }
 
   saveMarkers() {
     let layers = this.markers._layers;
     let coord = [];
-    
+
     for (let prop in layers) {
       const markers = layers[prop];
       coord.push(markers.getLatLng());
@@ -73,11 +73,30 @@ export class MainPageComponent implements OnInit {
     this.mainService.saveMarkers(coord)
       .subscribe(
         data => {
-          console.log(data);
+          DG.then(() => {
+            this.markers = DG.featureGroup();
+          });
         });
   }
 
   logOut() {
     this.authenticationService.logout();
+  }
+
+  showMarkers() {
+    this.mainService.getUserMarkers()
+      .subscribe(
+        markers => {
+          DG.then(() => {
+            let userMarkers = DG.featureGroup();
+            for (let item of markers) {
+              for (let marker of item) {
+                DG.marker([marker.lat, marker.lng]).addTo(userMarkers);
+              }
+            }
+            userMarkers.addTo(this.map);
+            this.map.fitBounds(userMarkers.getBounds());
+          });
+        });
   }
 }

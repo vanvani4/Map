@@ -7,7 +7,8 @@ module.exports = function (app) {
             if (err) {
                 res.send(err);
             }
-            user.myMarkers.push(req.body.coord)
+            //console.log(req.body.coord);
+            user.myMarkers.push(req.body.coord);
             user.save(function (err) {
                 if (err) {
                     res.send(err);
@@ -49,5 +50,15 @@ module.exports = function (app) {
                 }
             });
         console.log('post/login');
+    });
+
+    app.get('/main', function (req, res) {
+        User.findById(req.query.id, function (err, user) {
+            if (err) {
+                res.send(err);
+            };
+            res.json(user.myMarkers);
+        });
+        console.log('get/main');
     });
 }
