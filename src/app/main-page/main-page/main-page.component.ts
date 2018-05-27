@@ -12,6 +12,7 @@ export class MainPageComponent implements OnInit {
 
   map: any;
   markers: any;
+  data: any;
 
   constructor(private authenticationService: AuthenticationService, private mainService: MainService) { }
 
@@ -19,6 +20,7 @@ export class MainPageComponent implements OnInit {
     this.createMap();
     this.addGeolocation();
     this.addMarkers();
+    this.getData()
   }
 
   createMap() {
@@ -27,6 +29,7 @@ export class MainPageComponent implements OnInit {
         center: [46.47, 30.74],
         zoom: 15
       });
+      DG.control.location().addTo(this.map);
     });
   }
 
@@ -54,13 +57,6 @@ export class MainPageComponent implements OnInit {
     });
   }
 
-  // showMarkers() {
-  //   DG.then(() => {
-  //     this.markers.addTo(this.map);
-  //     this.map.fitBounds(this.markers.getBounds());
-  //   });
-  // }
-
   saveMarkers() {
     let layers = this.markers._layers;
     let coord = [];
@@ -80,7 +76,8 @@ export class MainPageComponent implements OnInit {
   }
 
   logOut() {
-    this.authenticationService.logout();
+    console.log(this.map.getCenter());
+    //this.authenticationService.logout();
   }
 
   showMarkers() {
@@ -98,5 +95,61 @@ export class MainPageComponent implements OnInit {
             this.map.fitBounds(userMarkers.getBounds());
           });
         });
+  }
+
+  findPharmacies() {
+    this.mainService.searchObject('pharmacies')
+      .subscribe(
+        data => {
+          for (let item of data.result.items) {
+            console.log(item.point);
+            DG.then(() => {
+              DG.marker([item.point.lat, item.point.lon]).addTo(this.map)
+            });
+          }
+        });
+  }
+
+  findGaStations() {
+    this.mainService.searchObject('gas_stations')
+      .subscribe(
+        data => {
+          for (let item of data.result.items) {
+            console.log(item.point);
+            DG.then(() => {
+              DG.marker([item.point.lat, item.point.lon]).addTo(this.map)
+            });
+          }
+        });
+  }
+
+  findSchools() {
+    this.mainService.searchObject('schools')
+      .subscribe(
+        data => {
+          for (let item of data.result.items) {
+            console.log(item.point);
+            DG.then(() => {
+              DG.marker([item.point.lat, item.point.lon]).addTo(this.map)
+            });
+          }
+        });
+  }
+
+  findRestaurants() {
+    this.mainService.searchObject('restaurants')
+    .subscribe(
+      data => {
+        for (let item of data.result.items) {
+          console.log(item.point);
+          DG.then(() => {
+            DG.marker([item.point.lat, item.point.lon]).addTo(this.map)
+          });
+        }
+      });
+  }
+
+  getData() {
+    console.log(this.data);
   }
 }
