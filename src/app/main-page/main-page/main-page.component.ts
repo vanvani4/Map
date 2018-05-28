@@ -20,7 +20,6 @@ export class MainPageComponent implements OnInit {
     this.createMap();
     this.addGeolocation();
     this.addMarkers();
-    this.getData()
   }
 
   createMap() {
@@ -53,6 +52,8 @@ export class MainPageComponent implements OnInit {
       this.markers = DG.featureGroup();
       this.map.on('click', (e) => {
         DG.marker([e.latlng.lat, e.latlng.lng]).addTo(this.map).addTo(this.markers);
+        console.log(this.markers);
+
       });
     });
   }
@@ -76,7 +77,13 @@ export class MainPageComponent implements OnInit {
   }
 
   logOut() {
-    console.log(this.map.getCenter());
+    // let arr = [];
+    // console.log(this.map._layers);
+    // this.map.eachLayer((layer) => {
+    //   if (layer._layers && Object.keys(layer).length > 0) {
+    //     this.map.removeLayer(layer)
+    //   }
+    // });
     //this.authenticationService.logout();
   }
 
@@ -98,58 +105,147 @@ export class MainPageComponent implements OnInit {
   }
 
   findPharmacies() {
-    this.mainService.searchObject('pharmacies')
+    this.deleteLayers();
+    let coord1 = this.map.getBounds().getNorthWest();
+    let coord2 = this.map.getBounds().getSouthEast();
+    let page = 10;
+    console.log(coord1, coord2);
+    this.mainService.searchObject('аптеки', coord1, coord2, page)
       .subscribe(
         data => {
+          console.log('page1 ' + data);
+          console.log(data.result.total);
+          let totalPages = data.result.total / 50;
+          let integerTotalPages = Math.floor(totalPages);
+          for (let i = integerTotalPages + 1; i > 1; i--) {
+            this.mainService.searchObject('аптеки', coord1, coord2, i)
+              .subscribe(
+                data => {
+                  console.log('page' + i + data);
+                  for (let item of data.result.items) {
+                    DG.then(() => {
+                      DG.marker([item.point.lat, item.point.lon])
+                        .addTo(this.map).bindPopup(item.name);
+                    });
+                  }
+                });
+          }
           for (let item of data.result.items) {
-            console.log(item.point);
             DG.then(() => {
-              DG.marker([item.point.lat, item.point.lon]).addTo(this.map)
+              DG.marker([item.point.lat, item.point.lon])
+                .addTo(this.map).bindPopup(item.name);
             });
           }
         });
   }
 
-  findGaStations() {
-    this.mainService.searchObject('gas_stations')
+  findGasStations() {
+    this.deleteLayers();
+    let coord1 = this.map.getBounds().getNorthWest();
+    let coord2 = this.map.getBounds().getSouthEast();
+    let page = 5;
+    this.mainService.searchObject('заправки', coord1, coord2, page)
       .subscribe(
         data => {
+          console.log('page1 ' + data);
+          console.log(data.result.total);
+          let totalPages = data.result.total / 50;
+          let integerTotalPages = Math.floor(totalPages);
+          for (let i = integerTotalPages + 1; i > 1; i--) {
+            this.mainService.searchObject('заправки', coord1, coord2, i)
+              .subscribe(
+                data => {
+                  console.log('page' + i + data);
+                  for (let item of data.result.items) {
+                    DG.then(() => {
+                      DG.marker([item.point.lat, item.point.lon])
+                        .addTo(this.map).bindPopup(item.name);
+                    });
+                  }
+                });
+          }
           for (let item of data.result.items) {
-            console.log(item.point);
             DG.then(() => {
-              DG.marker([item.point.lat, item.point.lon]).addTo(this.map)
+              DG.marker([item.point.lat, item.point.lon])
+                .addTo(this.map).bindPopup(item.name);
             });
           }
         });
   }
 
   findSchools() {
-    this.mainService.searchObject('schools')
+    this.deleteLayers();
+    let coord1 = this.map.getBounds().getNorthWest();
+    let coord2 = this.map.getBounds().getSouthEast();
+    let page = 1;
+    this.mainService.searchObject('школы', coord1, coord2, page)
       .subscribe(
         data => {
+          console.log('page1 ' + data);
+          console.log(data.result.total);
+          let totalPages = data.result.total / 50;
+          let integerTotalPages = Math.floor(totalPages);
+          for (let i = integerTotalPages + 1; i > 1; i--) {
+            this.mainService.searchObject('школы', coord1, coord2, i)
+              .subscribe(
+                data => {
+                  console.log('page' + i + data);
+                  for (let item of data.result.items) {
+                    DG.then(() => {
+                      DG.marker([item.point.lat, item.point.lon])
+                        .addTo(this.map).bindPopup(item.name);
+                    });
+                  }
+                });
+          }
           for (let item of data.result.items) {
-            console.log(item.point);
             DG.then(() => {
-              DG.marker([item.point.lat, item.point.lon]).addTo(this.map)
+              DG.marker([item.point.lat, item.point.lon])
+                .addTo(this.map).bindPopup(item.name);
             });
           }
         });
   }
 
   findRestaurants() {
-    this.mainService.searchObject('restaurants')
-    .subscribe(
-      data => {
-        for (let item of data.result.items) {
-          console.log(item.point);
-          DG.then(() => {
-            DG.marker([item.point.lat, item.point.lon]).addTo(this.map)
-          });
-        }
-      });
+    this.deleteLayers();
+    let coord1 = this.map.getBounds().getNorthWest();
+    let coord2 = this.map.getBounds().getSouthEast();
+    let page = 1;
+    this.mainService.searchObject('рестораны', coord1, coord2, page)
+      .subscribe(
+        data => {
+          console.log('page1 ' + data);
+          console.log(data.result.total);
+          let totalPages = data.result.total / 50;
+          let integerTotalPages = Math.floor(totalPages);
+          for (let i = integerTotalPages + 1; i > 1; i--) {
+            this.mainService.searchObject('рестораны', coord1, coord2, i)
+              .subscribe(
+                data => {
+                  console.log('page' + i + data);
+                  for (let item of data.result.items) {
+                    DG.then(() => {
+                      DG.marker([item.point.lat, item.point.lon])
+                        .addTo(this.map).bindPopup(item.name);
+                    });
+                  }
+                });
+          }
+          for (let item of data.result.items) {
+            DG.then(() => {
+              DG.marker([item.point.lat, item.point.lon])
+                .addTo(this.map).bindPopup(item.name);
+            });
+          }
+        });
   }
 
-  getData() {
-    console.log(this.data);
+  deleteLayers() {
+    this.map.eachLayer((layer) => {
+      if (layer._layers && Object.keys(layer).length > 0) {
+        this.map.removeLayer(layer)
+      }
+    });
   }
 }
