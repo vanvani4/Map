@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 })
 export class AboutAuthorComponent implements OnInit {
 
-  private currentUser;
+  public currentUser;
   constructor(private router: Router) { }
 
   ngOnInit() {
