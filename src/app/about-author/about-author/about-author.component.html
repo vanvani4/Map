@@ -1,3 +1,9 @@
-<p>
-  about-author works!
-</p>
+<h1>
+  {{currentUser.user.name.firstName}} {{currentUser.user.name.lastName}}
+</h1>
+
+<h3>
+  {{ currentUser.user.biography }}
+</h3>
+
+<button mat-raised-button color="primary" (click)="back()">Back</button>

@@ -4,12 +4,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { AuthorizationRoutingModule } from './authorization-routing.module';
 import { AuthorizationComponent } from './login-page/authorization.component';
+import { MaterialModule } from '../material/material.module';
 
 @NgModule({
   imports: [
     CommonModule,
     AuthorizationRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MaterialModule
   ],
   declarations: [AuthorizationComponent]
 })

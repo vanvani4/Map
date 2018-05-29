@@ -9,6 +9,7 @@ import { AboutAuthorModule } from './about-author/about-author.module';
 import { AuthorizationModule } from './authorization/authorization.module';
 import { AuthenticationService } from './guard/authentication.service';
 import { AuthGuardService } from './guard/auth.guard';
+import { MaterialModule } from './material/material.module';
 
 const appRoutes: Routes = [
   {path: '', redirectTo: 'main', pathMatch: 'full'}
@@ -25,6 +26,7 @@ const appRoutes: Routes = [
     AboutAuthorModule,
     AuthorizationModule,
     RouterModule.forRoot(appRoutes),
+    MaterialModule
   ],
   providers: [AuthenticationService, AuthGuardService],
   bootstrap: [AppComponent]

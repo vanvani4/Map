@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as DG from '2gis-maps';
 import { AuthenticationService } from '../../guard/authentication.service';
 import { MainService } from '../main.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-page',
@@ -14,7 +15,9 @@ export class MainPageComponent implements OnInit {
   markers: any;
   data: any;
 
-  constructor(private authenticationService: AuthenticationService, private mainService: MainService) { }
+  constructor(private authenticationService: AuthenticationService, 
+              private mainService: MainService, 
+              private router: Router) { }
 
   ngOnInit() {
     this.createMap();
@@ -52,7 +55,6 @@ export class MainPageComponent implements OnInit {
       this.markers = DG.featureGroup();
       this.map.on('click', (e) => {
         DG.marker([e.latlng.lat, e.latlng.lng]).addTo(this.map).addTo(this.markers);
-        console.log(this.markers);
       });
     });
   }
@@ -76,7 +78,9 @@ export class MainPageComponent implements OnInit {
   }
 
   logOut() {
-    this.authenticationService.logout();
+    //this.authenticationService.logout();
+    console.log(this.map);
+    
   }
 
   showMarkers() {
@@ -97,190 +101,179 @@ export class MainPageComponent implements OnInit {
   }
 
   findPharmacies() {
-    this.deleteLayers();
+    this.hideMarkers();
     let coord1 = this.map.getBounds().getNorthWest();
     let coord2 = this.map.getBounds().getSouthEast();
     let page = 1;
-    console.log(coord1, coord2);
     this.mainService.searchObject('аптеки', coord1, coord2, page)
       .subscribe(
         data => {
-          console.log('page1 ' + data);
-          console.log(data.result.total);
           let totalPages = data.result.total / 50;
           let integerTotalPages = Math.floor(totalPages);
           for (let i = integerTotalPages + 1; i > 1; i--) {
             this.mainService.searchObject('аптеки', coord1, coord2, i)
               .subscribe(
                 data => {
-                  console.log('page' + i + data);
                   for (let item of data.result.items) {
-                    if (item.point.lat < coord1.lat && 
-                       item.point.lat > coord2.lat && 
-                       item.point.lon > coord1.lng &&
-                       item.point.lon <  coord2.lng) {
-                        DG.then(() => {
-                          DG.marker([item.point.lat, item.point.lon])
-                            .addTo(this.map).bindPopup(item.name);
-                        });
-                       }
+                    if (item.point.lat < coord1.lat &&
+                      item.point.lat > coord2.lat &&
+                      item.point.lon > coord1.lng &&
+                      item.point.lon < coord2.lng) {
+                      DG.then(() => {
+                        DG.marker([item.point.lat, item.point.lon])
+                          .addTo(this.markers).bindPopup(item.name);
+                      });
+                    }
                   }
                 });
           }
           for (let item of data.result.items) {
-            if (item.point.lat < coord1.lat && 
-              item.point.lat > coord2.lat && 
+            if (item.point.lat < coord1.lat &&
+              item.point.lat > coord2.lat &&
               item.point.lon > coord1.lng &&
-              item.point.lon <  coord2.lng) {
-                DG.then(() => {
-                  DG.marker([item.point.lat, item.point.lon])
-                    .addTo(this.map).bindPopup(item.name);
-                });
-              }
+              item.point.lon < coord2.lng) {
+              DG.then(() => {
+                DG.marker([item.point.lat, item.point.lon])
+                  .addTo(this.markers).bindPopup(item.name);
+              });
+            }
           }
         });
+    this.markers.addTo(this.map);
   }
 
   findGasStations() {
-    this.deleteLayers();
+    this.hideMarkers();
     let coord1 = this.map.getBounds().getNorthWest();
     let coord2 = this.map.getBounds().getSouthEast();
     let page = 1;
-    console.log(coord1, coord2);
     this.mainService.searchObject('заправки', coord1, coord2, page)
       .subscribe(
         data => {
-          console.log('page1 ' + data);
-          console.log(data.result.total);
           let totalPages = data.result.total / 50;
           let integerTotalPages = Math.floor(totalPages);
           for (let i = integerTotalPages + 1; i > 1; i--) {
             this.mainService.searchObject('заправки', coord1, coord2, i)
               .subscribe(
                 data => {
-                  console.log('page' + i + data);
                   for (let item of data.result.items) {
-                    if (item.point.lat < coord1.lat && 
-                       item.point.lat > coord2.lat && 
-                       item.point.lon > coord1.lng &&
-                       item.point.lon <  coord2.lng) {
-                        DG.then(() => {
-                          DG.marker([item.point.lat, item.point.lon])
-                            .addTo(this.map).bindPopup(item.name);
-                        });
-                       }
+                    if (item.point.lat < coord1.lat &&
+                      item.point.lat > coord2.lat &&
+                      item.point.lon > coord1.lng &&
+                      item.point.lon < coord2.lng) {
+                      DG.then(() => {
+                        DG.marker([item.point.lat, item.point.lon])
+                          .addTo(this.markers).bindPopup(item.name);
+                      });
+                    }
                   }
                 });
           }
           for (let item of data.result.items) {
-            if (item.point.lat < coord1.lat && 
-              item.point.lat > coord2.lat && 
+            if (item.point.lat < coord1.lat &&
+              item.point.lat > coord2.lat &&
               item.point.lon > coord1.lng &&
-              item.point.lon <  coord2.lng) {
-                DG.then(() => {
-                  DG.marker([item.point.lat, item.point.lon])
-                    .addTo(this.map).bindPopup(item.name);
-                });
-              }
+              item.point.lon < coord2.lng) {
+              DG.then(() => {
+                DG.marker([item.point.lat, item.point.lon])
+                  .addTo(this.markers).bindPopup(item.name);
+              });
+            }
           }
         });
+    this.markers.addTo(this.map);
   }
 
   findSchools() {
-    this.deleteLayers();
+    this.hideMarkers();
     let coord1 = this.map.getBounds().getNorthWest();
     let coord2 = this.map.getBounds().getSouthEast();
     let page = 1;
-    console.log(coord1, coord2);
     this.mainService.searchObject('школы', coord1, coord2, page)
       .subscribe(
         data => {
-          console.log('page1 ' + data);
-          console.log(data.result.total);
           let totalPages = data.result.total / 50;
           let integerTotalPages = Math.floor(totalPages);
           for (let i = integerTotalPages + 1; i > 1; i--) {
             this.mainService.searchObject('школы', coord1, coord2, i)
               .subscribe(
                 data => {
-                  console.log('page' + i + data);
                   for (let item of data.result.items) {
-                    if (item.point.lat < coord1.lat && 
-                       item.point.lat > coord2.lat && 
-                       item.point.lon > coord1.lng &&
-                       item.point.lon <  coord2.lng) {
-                        DG.then(() => {
-                          DG.marker([item.point.lat, item.point.lon])
-                            .addTo(this.map).bindPopup(item.name);
-                        });
-                       }
+                    if (item.point.lat < coord1.lat &&
+                      item.point.lat > coord2.lat &&
+                      item.point.lon > coord1.lng &&
+                      item.point.lon < coord2.lng) {
+                      DG.then(() => {
+                        DG.marker([item.point.lat, item.point.lon])
+                          .addTo(this.markers).bindPopup(item.name);
+                      });
+                    }
                   }
                 });
           }
           for (let item of data.result.items) {
-            if (item.point.lat < coord1.lat && 
-              item.point.lat > coord2.lat && 
+            if (item.point.lat < coord1.lat &&
+              item.point.lat > coord2.lat &&
               item.point.lon > coord1.lng &&
-              item.point.lon <  coord2.lng) {
-                DG.then(() => {
-                  DG.marker([item.point.lat, item.point.lon])
-                    .addTo(this.map).bindPopup(item.name);
-                });
-              }
+              item.point.lon < coord2.lng) {
+              DG.then(() => {
+                DG.marker([item.point.lat, item.point.lon])
+                  .addTo(this.markers).bindPopup(item.name);
+              });
+            }
           }
         });
+    this.markers.addTo(this.map);
   }
 
   findRestaurants() {
-    this.deleteLayers();
+    this.hideMarkers();
     let coord1 = this.map.getBounds().getNorthWest();
     let coord2 = this.map.getBounds().getSouthEast();
     let page = 1;
-    console.log(coord1, coord2);
     this.mainService.searchObject('рестораны', coord1, coord2, page)
       .subscribe(
         data => {
-          console.log('page1 ' + data);
-          console.log(data.result.total);
           let totalPages = data.result.total / 50;
           let integerTotalPages = Math.floor(totalPages);
           for (let i = integerTotalPages + 1; i > 1; i--) {
             this.mainService.searchObject('рестораны', coord1, coord2, i)
               .subscribe(
                 data => {
-                  console.log('page' + i + data);
                   for (let item of data.result.items) {
-                    if (item.point.lat < coord1.lat && 
-                       item.point.lat > coord2.lat && 
-                       item.point.lon > coord1.lng &&
-                       item.point.lon <  coord2.lng) {
-                        DG.then(() => {
-                          DG.marker([item.point.lat, item.point.lon])
-                            .addTo(this.map).bindPopup(item.name);
-                        });
-                       }
+                    if (item.point.lat < coord1.lat &&
+                      item.point.lat > coord2.lat &&
+                      item.point.lon > coord1.lng &&
+                      item.point.lon < coord2.lng) {
+                      DG.then(() => {
+                        DG.marker([item.point.lat, item.point.lon])
+                          .addTo(this.markers).bindPopup(item.name);
+                      });
+                    }
                   }
                 });
           }
           for (let item of data.result.items) {
-            if (item.point.lat < coord1.lat && 
-              item.point.lat > coord2.lat && 
+            if (item.point.lat < coord1.lat &&
+              item.point.lat > coord2.lat &&
               item.point.lon > coord1.lng &&
-              item.point.lon <  coord2.lng) {
-                DG.then(() => {
-                  DG.marker([item.point.lat, item.point.lon])
-                    .addTo(this.map).bindPopup(item.name);
-                });
-              }
+              item.point.lon < coord2.lng) {
+              DG.then(() => {
+                DG.marker([item.point.lat, item.point.lon])
+                  .addTo(this.markers).bindPopup(item.name);
+              });
+            }
           }
         });
+    this.markers.addTo(this.map);
   }
 
-  deleteLayers() {
-    this.map.eachLayer((layer) => {
-      if (layer._layers && Object.keys(layer).length > 0) {
-        this.map.removeLayer(layer)
-      }
-    });
+  hideMarkers() {
+    this.markers.removeFrom(this.map);
+    this.markers._layers = {};
+  }
+
+  aboutAuthor() {
+    this.router.navigate(['about']);
   }
 }

@@ -36,8 +36,6 @@ export class AuthorizationComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder) { }
 
-  message: string;
-
   ngOnInit() {
     this.loginForm = this.fb.group({
       login: ['', Validators.required],

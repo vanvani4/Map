@@ -1,12 +1,18 @@
 <div id="map" style="width: 100%; height: 400px;"></div>
 
-<button (click)="showMarkers()">Show markers</button>
-<button (click)="saveMarkers()">Save markers</button>
-<button (click)="logOut()">Log out</button>
 
-<ul>
-    <li (click)="findPharmacies()">pharmacies</li>
-    <li (click)="findGasStations()">gas stations</li>
-    <li (click)="findSchools()">schools</li>
-    <li (click)="findRestaurants()">restaurants</li>
-</ul>
+<div class="button-row">
+    <button mat-raised-button color="primary" (click)="showMarkers()">Show markers</button>
+    <button mat-raised-button color="primary" (click)="saveMarkers()">Save markers</button>
+    <button mat-raised-button color="primary" (click)="aboutAuthor()">About author</button>
+    <button mat-raised-button color="primary" (click)="logOut()">Log out</button>
+</div>
+
+
+<mat-list class="search-list">
+    <h3>You can search for objects:</h3>
+    <mat-list-item (click)="findPharmacies()"> Pharmacies </mat-list-item>
+    <mat-list-item (click)="findGasStations()"> Gas stations </mat-list-item>
+    <mat-list-item (click)="findSchools()"> Schools </mat-list-item>
+    <mat-list-item (click)="findRestaurants()"> Restaurants </mat-list-item>
+</mat-list>
