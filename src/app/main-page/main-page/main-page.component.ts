@@ -78,9 +78,7 @@ export class MainPageComponent implements OnInit {
   }
 
   logOut() {
-    //this.authenticationService.logout();
-    console.log(this.map);
-    
+    this.authenticationService.logout();    
   }
 
   showMarkers() {
