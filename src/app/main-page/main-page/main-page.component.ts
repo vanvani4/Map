@@ -39,7 +39,7 @@ export class MainPageComponent implements OnInit {
     DG.then(() => {
       this.map.locate({ setView: true, watch: true })
         .on('locationfound', (e) => {
-          let marker = DG.marker([e.latitude, e.longitude]).addTo(this.map);
+          const marker = DG.marker([e.latitude, e.longitude]).addTo(this.map);
         })
         .on('locationerror', (e) => {
           DG.popup()
@@ -60,10 +60,10 @@ export class MainPageComponent implements OnInit {
   }
 
   saveMarkers() {
-    let layers = this.markers._layers;
-    let coord = [];
+    const layers = this.markers._layers;
+    const coord = [];
 
-    for (let prop in layers) {
+    for (const prop in layers) {
       const markers = layers[prop];
       coord.push(markers.getLatLng());
     }
@@ -86,9 +86,9 @@ export class MainPageComponent implements OnInit {
       .subscribe(
         markers => {
           DG.then(() => {
-            let userMarkers = DG.featureGroup();
-            for (let item of markers) {
-              for (let marker of item) {
+            const userMarkers = DG.featureGroup();
+            for (const item of markers) {
+              for (const marker of item) {
                 DG.marker([marker.lat, marker.lng]).addTo(userMarkers);
               }
             }
@@ -100,14 +100,14 @@ export class MainPageComponent implements OnInit {
 
   findObject(serchObj) {
     this.hideMarkers();
-    let coordNW = this.map.getBounds().getNorthWest();
-    let coordSE = this.map.getBounds().getSouthEast();
-    let page = 1;
+    const coordNW = this.map.getBounds().getNorthWest();
+    const coordSE = this.map.getBounds().getSouthEast();
+    const page = 1;
     this.mainService.searchObject(serchObj, coordNW, coordSE, page)
       .subscribe(
         data => {
-          let totalPages = data.result.total / 50;
-          let integerTotalPages = Math.floor(totalPages);
+          const totalPages = data.result.total / 50;
+          const integerTotalPages = Math.floor(totalPages);
           for (let i = integerTotalPages + 1; i > 1; i--) {
             this.mainService.searchObject(serchObj, coordNW, coordSE, i)
               .subscribe(
@@ -129,7 +129,7 @@ export class MainPageComponent implements OnInit {
   }
 
   addObjectOnMap(coordNW, coordSE, data) {
-    for (let item of data.result.items) {
+    for (const item of data.result.items) {
       if (item.point.lat < coordNW.lat &&
         item.point.lat > coordSE.lat &&
         item.point.lon > coordNW.lng &&

@@ -8,14 +8,14 @@ import 'rxjs/add/operator/map';
 export class AuthenticationService {
 
   constructor(private http: HttpClient, private router: Router) { }
-  
+
   login(login: string, password: string) {
     return this.http.post<any>('http://localhost:3000/login', { login: login, password: password })
       .map(user => {
         if (user) {
           localStorage.setItem('currentUser', JSON.stringify(user));
         }
-        return user
+        return user;
       });
   }
 

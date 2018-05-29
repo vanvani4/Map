@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AboutAuthorComponent } from './about-author/about-author.component'
+import { AboutAuthorComponent } from './about-author/about-author.component';
 
 const routes: Routes = [
   {path: 'about', component: AboutAuthorComponent},

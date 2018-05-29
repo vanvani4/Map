@@ -1,8 +1,15 @@
-<h1>
+<h1 *ngIf="currentUser.user">
   {{currentUser.user.name.firstName}} {{currentUser.user.name.lastName}}
 </h1>
+<h1 *ngIf="!currentUser.user">
+  {{currentUser.name.firstName}} {{currentUser.name.lastName}}
+</h1>
 
-<h3>
+<h3 *ngIf="currentUser.user">
+  {{ currentUser.user.biography }}
+</h3>
+
+<h3 *ngIf="!currentUser.user">
   {{ currentUser.user.biography }}
 </h3>
 
