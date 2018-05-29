@@ -53,7 +53,6 @@ export class MainPageComponent implements OnInit {
       this.map.on('click', (e) => {
         DG.marker([e.latlng.lat, e.latlng.lng]).addTo(this.map).addTo(this.markers);
         console.log(this.markers);
-
       });
     });
   }
@@ -77,14 +76,7 @@ export class MainPageComponent implements OnInit {
   }
 
   logOut() {
-    // let arr = [];
-    // console.log(this.map._layers);
-    // this.map.eachLayer((layer) => {
-    //   if (layer._layers && Object.keys(layer).length > 0) {
-    //     this.map.removeLayer(layer)
-    //   }
-    // });
-    //this.authenticationService.logout();
+    this.authenticationService.logout();
   }
 
   showMarkers() {
@@ -108,7 +100,7 @@ export class MainPageComponent implements OnInit {
     this.deleteLayers();
     let coord1 = this.map.getBounds().getNorthWest();
     let coord2 = this.map.getBounds().getSouthEast();
-    let page = 10;
+    let page = 1;
     console.log(coord1, coord2);
     this.mainService.searchObject('аптеки', coord1, coord2, page)
       .subscribe(
@@ -123,18 +115,28 @@ export class MainPageComponent implements OnInit {
                 data => {
                   console.log('page' + i + data);
                   for (let item of data.result.items) {
-                    DG.then(() => {
-                      DG.marker([item.point.lat, item.point.lon])
-                        .addTo(this.map).bindPopup(item.name);
-                    });
+                    if (item.point.lat < coord1.lat && 
+                       item.point.lat > coord2.lat && 
+                       item.point.lon > coord1.lng &&
+                       item.point.lon <  coord2.lng) {
+                        DG.then(() => {
+                          DG.marker([item.point.lat, item.point.lon])
+                            .addTo(this.map).bindPopup(item.name);
+                        });
+                       }
                   }
                 });
           }
           for (let item of data.result.items) {
-            DG.then(() => {
-              DG.marker([item.point.lat, item.point.lon])
-                .addTo(this.map).bindPopup(item.name);
-            });
+            if (item.point.lat < coord1.lat && 
+              item.point.lat > coord2.lat && 
+              item.point.lon > coord1.lng &&
+              item.point.lon <  coord2.lng) {
+                DG.then(() => {
+                  DG.marker([item.point.lat, item.point.lon])
+                    .addTo(this.map).bindPopup(item.name);
+                });
+              }
           }
         });
   }
@@ -143,7 +145,8 @@ export class MainPageComponent implements OnInit {
     this.deleteLayers();
     let coord1 = this.map.getBounds().getNorthWest();
     let coord2 = this.map.getBounds().getSouthEast();
-    let page = 5;
+    let page = 1;
+    console.log(coord1, coord2);
     this.mainService.searchObject('заправки', coord1, coord2, page)
       .subscribe(
         data => {
@@ -157,18 +160,28 @@ export class MainPageComponent implements OnInit {
                 data => {
                   console.log('page' + i + data);
                   for (let item of data.result.items) {
-                    DG.then(() => {
-                      DG.marker([item.point.lat, item.point.lon])
-                        .addTo(this.map).bindPopup(item.name);
-                    });
+                    if (item.point.lat < coord1.lat && 
+                       item.point.lat > coord2.lat && 
+                       item.point.lon > coord1.lng &&
+                       item.point.lon <  coord2.lng) {
+                        DG.then(() => {
+                          DG.marker([item.point.lat, item.point.lon])
+                            .addTo(this.map).bindPopup(item.name);
+                        });
+                       }
                   }
                 });
           }
           for (let item of data.result.items) {
-            DG.then(() => {
-              DG.marker([item.point.lat, item.point.lon])
-                .addTo(this.map).bindPopup(item.name);
-            });
+            if (item.point.lat < coord1.lat && 
+              item.point.lat > coord2.lat && 
+              item.point.lon > coord1.lng &&
+              item.point.lon <  coord2.lng) {
+                DG.then(() => {
+                  DG.marker([item.point.lat, item.point.lon])
+                    .addTo(this.map).bindPopup(item.name);
+                });
+              }
           }
         });
   }
@@ -178,6 +191,7 @@ export class MainPageComponent implements OnInit {
     let coord1 = this.map.getBounds().getNorthWest();
     let coord2 = this.map.getBounds().getSouthEast();
     let page = 1;
+    console.log(coord1, coord2);
     this.mainService.searchObject('школы', coord1, coord2, page)
       .subscribe(
         data => {
@@ -191,18 +205,28 @@ export class MainPageComponent implements OnInit {
                 data => {
                   console.log('page' + i + data);
                   for (let item of data.result.items) {
-                    DG.then(() => {
-                      DG.marker([item.point.lat, item.point.lon])
-                        .addTo(this.map).bindPopup(item.name);
-                    });
+                    if (item.point.lat < coord1.lat && 
+                       item.point.lat > coord2.lat && 
+                       item.point.lon > coord1.lng &&
+                       item.point.lon <  coord2.lng) {
+                        DG.then(() => {
+                          DG.marker([item.point.lat, item.point.lon])
+                            .addTo(this.map).bindPopup(item.name);
+                        });
+                       }
                   }
                 });
           }
           for (let item of data.result.items) {
-            DG.then(() => {
-              DG.marker([item.point.lat, item.point.lon])
-                .addTo(this.map).bindPopup(item.name);
-            });
+            if (item.point.lat < coord1.lat && 
+              item.point.lat > coord2.lat && 
+              item.point.lon > coord1.lng &&
+              item.point.lon <  coord2.lng) {
+                DG.then(() => {
+                  DG.marker([item.point.lat, item.point.lon])
+                    .addTo(this.map).bindPopup(item.name);
+                });
+              }
           }
         });
   }
@@ -212,6 +236,7 @@ export class MainPageComponent implements OnInit {
     let coord1 = this.map.getBounds().getNorthWest();
     let coord2 = this.map.getBounds().getSouthEast();
     let page = 1;
+    console.log(coord1, coord2);
     this.mainService.searchObject('рестораны', coord1, coord2, page)
       .subscribe(
         data => {
@@ -225,18 +250,28 @@ export class MainPageComponent implements OnInit {
                 data => {
                   console.log('page' + i + data);
                   for (let item of data.result.items) {
-                    DG.then(() => {
-                      DG.marker([item.point.lat, item.point.lon])
-                        .addTo(this.map).bindPopup(item.name);
-                    });
+                    if (item.point.lat < coord1.lat && 
+                       item.point.lat > coord2.lat && 
+                       item.point.lon > coord1.lng &&
+                       item.point.lon <  coord2.lng) {
+                        DG.then(() => {
+                          DG.marker([item.point.lat, item.point.lon])
+                            .addTo(this.map).bindPopup(item.name);
+                        });
+                       }
                   }
                 });
           }
           for (let item of data.result.items) {
-            DG.then(() => {
-              DG.marker([item.point.lat, item.point.lon])
-                .addTo(this.map).bindPopup(item.name);
-            });
+            if (item.point.lat < coord1.lat && 
+              item.point.lat > coord2.lat && 
+              item.point.lon > coord1.lng &&
+              item.point.lon <  coord2.lng) {
+                DG.then(() => {
+                  DG.marker([item.point.lat, item.point.lon])
+                    .addTo(this.map).bindPopup(item.name);
+                });
+              }
           }
         });
   }

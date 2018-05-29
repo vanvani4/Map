@@ -44,6 +44,7 @@ module.exports = function (app) {
                     res.send(err);
                 }
                 if (user) {
+                    user.password = '';
                     res.status(200).send({
                         user: user
                     });
